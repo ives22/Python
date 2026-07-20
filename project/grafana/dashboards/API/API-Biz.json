@@ -1,0 +1,927 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${cluster}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "displayMode": "gradient",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${cluster}"
+          },
+          "editorMode": "code",
+          "expr": "sum(increase(biz_sub_duration_ms_bucket{namespace=~\"$namespace\",service=~\"$service\",type=~\"$type\", le!=\"+Inf\"}[$__range])) by (le)",
+          "format": "heatmap",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "业务请求耗时分布",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${cluster}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "displayMode": "gradient",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${cluster}"
+          },
+          "editorMode": "code",
+          "expr": "sum(increase(biz_sub_duration_ms_bucket{namespace=~\"$namespace\",service=~\"$service\",type=~\"$type\", le!=\"+Inf\"}[$__range])) by (le)\n/\nignoring(le) group_left\nsum(increase(biz_sub_duration_ms_count{namespace=~\"$namespace\",service=~\"$service\",type=~\"$type\"}[$__range])) * 10000\n",
+          "format": "heatmap",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "业务请求耗时分布(万分比)",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${cluster}"
+      },
+      "description": "基于服务维度统计各服务总QPS",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 3,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "max",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${cluster}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum by (service) (rate(biz_sub_duration_ms_count{namespace=~\"$namespace\",service=~\"$service\",type=~\"$type\"}[5m]))",
+          "instant": false,
+          "legendFormat": "{{service}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "业务模块QPS",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${cluster}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          }
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 2,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "calculate": false,
+        "cellGap": 1,
+        "color": {
+          "exponent": 0.5,
+          "fill": "dark-orange",
+          "mode": "scheme",
+          "reverse": false,
+          "scale": "exponential",
+          "scheme": "Oranges",
+          "steps": 64
+        },
+        "exemplars": {
+          "color": "rgba(255,0,255,0.7)"
+        },
+        "filterValues": {
+          "le": 1e-09
+        },
+        "legend": {
+          "show": true
+        },
+        "rowsFrame": {
+          "layout": "auto"
+        },
+        "tooltip": {
+          "mode": "single",
+          "showColorScale": false,
+          "yHistogram": false
+        },
+        "yAxis": {
+          "axisPlacement": "left",
+          "reverse": false
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${cluster}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum by(le) (increase(biz_sub_duration_ms_bucket{namespace=~\"$namespace\",service=~\"$service\",type=~\"$type\"}[5m])) > 0",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "业务请求耗时热力图",
+      "type": "heatmap"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${cluster}"
+      },
+      "description": "基于服务+Type维度计算各type请求耗时，计算耗时的 90 分位数",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "id": 5,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${cluster}"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.9, sum by (service, type, le) (rate(biz_sub_duration_ms_bucket{namespace=~\"$namespace\",service=~\"$service\",type=~\"$type\"}[5m])))",
+          "legendFormat": "{{service}} | {{type}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "业务模块请求耗时 【Type维度】 P90",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${cluster}"
+      },
+      "description": "基于服务维度统计各服务总QPS",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "id": 4,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "max",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${cluster}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum by (service, type) (rate(biz_sub_duration_ms_count{namespace=~\"$namespace\",service=~\"$service\",type=~\"$type\"}[5m]))",
+          "instant": false,
+          "legendFormat": "{{service}} | {{type}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "业务模块QPS 【Type维度】",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${cluster}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 27
+      },
+      "id": 7,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${cluster}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (service, type)(rate(biz_sub_duration_ms_sum{namespace=~\"$namespace\",service=~\"$service\",type=~\"$type\"}[5m])) / sum by(service,type) (rate(biz_sub_duration_ms_count{namespace=~\"$namespace\",service=~\"$service\",type=~\"$type\"}[5m]))",
+          "legendFormat": "{{service}} | {{type}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "业务模块请求平均耗时【Type维度】",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${cluster}"
+      },
+      "description": "基于服务+Type维度计算各type请求耗时，计算耗时的 95 分位数",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 27
+      },
+      "id": 6,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${cluster}"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.95, sum by (service, type, le) (rate(biz_sub_duration_ms_bucket{namespace=~\"$namespace\",service=~\"$service\",type=~\"$type\"}[5m])))",
+          "legendFormat": "{{service}} | {{type}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "业务模块请求耗时 【Type维度】 P95",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 42,
+  "tags": [
+    "API",
+    "Go"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allowCustomValue": true,
+        "current": {
+          "text": "API-Prev",
+          "value": "cfkkzr3d2bdoge"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Cluster",
+        "multi": false,
+        "name": "cluster",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "/^Prom-API-.*/",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allowCustomValue": true,
+        "current": {
+          "text": "api-center",
+          "value": "api-center"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${cluster}"
+        },
+        "definition": "label_values(biz_sub_duration_ms_bucket,namespace)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Namespace",
+        "multi": false,
+        "name": "namespace",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(biz_sub_duration_ms_bucket,namespace)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "allowCustomValue": true,
+        "current": {
+          "text": [
+            "identity-center"
+          ],
+          "value": [
+            "identity-center"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${cluster}"
+        },
+        "definition": "label_values(biz_sub_duration_ms_count{namespace=\"$namespace\"},service)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Service",
+        "multi": true,
+        "name": "service",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(biz_sub_duration_ms_count{namespace=\"$namespace\"},service)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "allowCustomValue": true,
+        "current": {
+          "text": [
+            "emitter_write"
+          ],
+          "value": [
+            "emitter_write"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${cluster}"
+        },
+        "definition": "label_values(biz_sub_duration_ms_count{service=~\"$service\", namespace=~\"$namespace\"},type)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Type",
+        "multi": true,
+        "name": "type",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(biz_sub_duration_ms_count{service=~\"$service\", namespace=~\"$namespace\"},type)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "browser",
+  "title": "API-Biz",
+  "_folder": "API"
+}

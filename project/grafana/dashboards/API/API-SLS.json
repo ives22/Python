@@ -1,0 +1,2483 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 18,
+      "title": "QPS统计",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${prom_ds}"
+      },
+      "description": "wallet-center下所有订单相关 RPC 汇总QPS(包括bet/award)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 1
+      },
+      "id": 17,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${prom_ds}"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(rpc_server_requests_duration_ms_count{namespace=\"api-center\",service=\"wallet-center\",method=~\"/game\\\\.GameService/Bet|/game\\\\.GameService/Award\"}[5m]))",
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Order QPS",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${bill_ds}"
+      },
+      "description": "基于日志 LogStore （bill）的数据计算其QPS值",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 1
+      },
+      "id": 16,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "last",
+            "mean"
+          ],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "1s",
+                "min_doc_count": "0"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${bill_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "",
+          "queryType": "lucene",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "Bill QPS",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 19,
+      "title": "运营商请求模块【$operator】 -- 可关联Operator",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${ext_request_log_ds}"
+      },
+      "description": "请求运营商接口，返回状态非200数目统计，按照 operator_id 进行分组",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 10
+      },
+      "id": 10,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "sum",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "maxWidth": 2,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "operator",
+              "id": "3",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "not status_code: 200 and operator: $operator",
+          "queryType": "lucene",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "运营商API异常请求",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${ext_request_log_ds}"
+      },
+      "description": "请求运营商接口，非200状态的分布情况，基于状态码进行百分比占比计算",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 12,
+        "y": 10
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent",
+            "value"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "status_code",
+              "id": "3",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "not status_code : 200 and operator : $operator",
+          "queryType": "lucene",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "运营商API异常分布【状态码维度】",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${ext_request_log_ds}"
+      },
+      "description": "请求运营商接口，非200状态的分布情况，基于运营商ID进行百分比占比计算",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 10
+      },
+      "id": 13,
+      "options": {
+        "displayLabels": [],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "values": [
+            "percent",
+            "value"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "operator",
+              "id": "3",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "not status_code : 200 and operator : $operator",
+          "queryType": "lucene",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "运营商API异常分布【运营商维度】",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${ext_request_log_ds}"
+      },
+      "description": "请求运营商接口，返回状态非200数目统计，按照 状态码 和请求方法进行分组",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "color-text"
+            },
+            "filterable": false,
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false,
+            "wrapHeaderText": false,
+            "wrapText": false
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "yellow",
+                "value": 0
+              },
+              {
+                "color": "dark-orange",
+                "value": 50
+              },
+              {
+                "color": "dark-red",
+                "value": 100
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "状态码"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "pill"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "custom.width",
+                "value": 89
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "方法"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "pill"
+                }
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "custom.width",
+                "value": 121
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "数目"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 127
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "状态"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 192
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "URL",
+              "scope": "series"
+            },
+            "properties": [
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "id": 9,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "数目"
+          }
+        ]
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "status_code",
+              "id": "3",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "api_method",
+              "id": "4",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "status",
+              "id": "5",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "url",
+              "id": "6",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "10"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "not status_code :200 and operator: $operator",
+          "queryType": "lucene",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "运营商API异常分布【状态/方法】维度",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Count": 3,
+              "api_method": 1,
+              "status": 2,
+              "status_code": 0
+            },
+            "renameByName": {
+              "Count": "数目",
+              "api_method": "方法",
+              "status": "状态",
+              "status_code": "状态码",
+              "url": "URL"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "aliyun-log-service-datasource",
+        "uid": "${sls_api_log_ds}"
+      },
+      "description": "请求运营商API接口，耗时分布请求",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cost_level"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "耗时区间(ms)"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "pill"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cnt"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "数量"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "percentage"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "百分比%"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "decimals",
+                "value": 4
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "lcd",
+                  "type": "gauge"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "id": 14,
+      "options": {
+        "cellHeight": "sm",
+        "frameIndex": 1,
+        "maxRowHeight": 1,
+        "showHeader": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "currentPage": 1,
+          "datasource": {
+            "type": "aliyun-log-service-datasource",
+            "uid": "${sls_api_log_ds}"
+          },
+          "logsPerPage": 100,
+          "logstore": "ext_request_log",
+          "powerSql": false,
+          "query": "(operator : $operator) and cost : *\n| SELECT\n    FLOOR(cost / 1000) * 1000 AS cost_level,\n    COUNT(*) AS cnt,\n    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 4) AS percentage\nGROUP BY cost_level\nORDER BY cost_level",
+          "refId": "A",
+          "totalLogs": 100,
+          "type": "all",
+          "xcol": "",
+          "ycol": ""
+        }
+      ],
+      "title": "运营商API请求耗时分布",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${ext_request_log_ds}"
+      },
+      "description": "按照运营商维度，统计请求运营商耗时大于1秒的请求。",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 26
+      },
+      "id": 7,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "sum",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "operator",
+              "id": "3",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "cost:[1000 TO *] and operator: $operator",
+          "queryType": "lucene",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "请求运营商耗时大于1秒",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "mode": "outer"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${ext_request_log_ds}"
+      },
+      "description": "按照运营商维度，统计请求运营商耗时大于1秒的请求。并基于运营商和接口维度进行分组。",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 26
+      },
+      "id": 6,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "sum",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "operator",
+              "id": "3",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "api_method",
+              "id": "4",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "cost:[1000 TO *] and operator: $operator",
+          "queryType": "lucene",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "请求运营商耗时大于1秒，按运营商和接口维度",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^(\\S+)\\s+(\\S+)$",
+            "renamePattern": "$2 - $1"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${ext_request_log_ds}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 34
+      },
+      "id": 15,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "max",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "field": "cost",
+              "id": "1",
+              "settings": {
+                "percents": [
+                  "50",
+                  "90",
+                  "95",
+                  "99"
+                ]
+              },
+              "type": "percentiles"
+            }
+          ],
+          "query": "operator: $operator",
+          "queryType": "lucene",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "请求运营商API RT分位数",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^(\\S+)\\s+(\\S+)$",
+            "renamePattern": "$1"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${wallet_center_ds}"
+      },
+      "description": "统计wallet-center的日志错误数，以及slow_call数。",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": 0
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 34
+      },
+      "id": 5,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "alias": "错误数(已排除slow_call)",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${wallet_center_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "level: error not gozero_level: slow",
+          "queryType": "lucene",
+          "refId": "A",
+          "timeField": "@timestamp"
+        },
+        {
+          "alias": "slow_call",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${wallet_center_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "gozero_level: slow",
+          "queryType": "lucene",
+          "refId": "B",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "wallet-center",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 42
+      },
+      "id": 20,
+      "title": "交易相关",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "aliyun-log-service-datasource",
+        "uid": "${sls_api_log_ds}"
+      },
+      "description": "基于 LogStore (ext_request_log) 进行查询统计",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*成功数目/"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*失败数目/"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 43
+      },
+      "id": 3,
+      "options": {
+        "cellHeight": "md",
+        "frameIndex": 0,
+        "showHeader": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "currentPage": 1,
+          "datasource": {
+            "type": "aliyun-log-service-datasource",
+            "uid": "${sls_api_log_ds}"
+          },
+          "logsPerPage": 100,
+          "logstore": "ext_request_log",
+          "powerSql": false,
+          "query": "api_method=cancelBet| SELECT 1, sum(is_success) AS success, sum(1 - is_success) AS fail FROM (\nSELECT\n\"request_body.orderId\",\nCASE\nWHEN bool_or(status_code = 200 AND \"response_body.code\" = 0) THEN 1\nELSE 0\nEND as is_success\nFROM log\nGROUP BY \"request_body.orderId\"\n)",
+          "refId": "A",
+          "totalLogs": 100,
+          "type": "all",
+          "xcol": "t",
+          "ycol": ""
+        },
+        {
+          "currentPage": 1,
+          "datasource": {
+            "type": "aliyun-log-service-datasource",
+            "uid": "${sls_api_log_ds}"
+          },
+          "logsPerPage": 100,
+          "logstore": "ext_request_log",
+          "powerSql": false,
+          "query": "api_method=award\n| SELECT 1,\nsum(is_recovered) AS award_success,\nsum(1 - is_recovered) AS award_fail\nFROM (\nSELECT\n\"request_body.orderId\",\n-- 如果该 ID 在所有记录中存在一条 200/0 的记录，则视为重试成功\nMAX(CASE WHEN status_code = 200 AND \"response_body.code\" = 0 THEN 1 ELSE 0 END) as is_recovered\nFROM log\nWHERE \"request_body.orderId\" IN (\n-- 【核心步】：先锁定所有发生过失败的订单 ID\nSELECT \"request_body.orderId\"\nFROM log\nWHERE status_code != 200 OR \"response_body.code\" != 0\n)\nGROUP BY \"request_body.orderId\"\n)",
+          "refId": "B",
+          "totalLogs": 100,
+          "type": "all",
+          "xcol": "t",
+          "ycol": ""
+        }
+      ],
+      "title": "交易去重",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "_col0",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "success",
+                "fail",
+                "award_success",
+                "award_fail"
+              ]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "award_fail": "award重试最终失败数目",
+              "award_success": "award重试最终成功数目",
+              "fail": "撤销最终失败数目",
+              "success": "撤销最终成功数目"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${ext_request_log_ds}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 47
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "alias": "确定失败bet",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "api_method:bet and status_code:200 and not response_body.code:0 and operator: $operator",
+          "queryType": "lucene",
+          "refId": "A",
+          "timeField": "@timestamp"
+        },
+        {
+          "alias": "不确定bet状态数量",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "api_method:bet and not status_code: 200 and operator: $operator",
+          "queryType": "lucene",
+          "refId": "B",
+          "timeField": "@timestamp"
+        },
+        {
+          "alias": "余额不足bet数量",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "api_method:bet and status_code:200 and response_body.code:8205 and operator: $operator",
+          "queryType": "lucene",
+          "refId": "C",
+          "timeField": "@timestamp"
+        },
+        {
+          "alias": "撤销bet次数",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "api_method:cancelBet and operator: $operator",
+          "queryType": "lucene",
+          "refId": "D",
+          "timeField": "@timestamp"
+        },
+        {
+          "alias": "撤销成功次数",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "api_method:cancelBet and status_code:200 and response_body.code:0 and operator: $operator",
+          "queryType": "lucene",
+          "refId": "E",
+          "timeField": "@timestamp"
+        },
+        {
+          "alias": "撤销失败次数",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "api_method:cancelBet and (not status_code:200 or not response_body.code:0) and operator: $operator",
+          "queryType": "lucene",
+          "refId": "F",
+          "timeField": "@timestamp"
+        },
+        {
+          "alias": "award 失败次数",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "api_method:award and (not status_code:200 or not response_body.code:0) and operator: $operator",
+          "queryType": "lucene",
+          "refId": "G",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "交易统计 -- 可关联Operator",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "${ext_request_log_ds}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 52
+      },
+      "id": 2,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "alias": "确定失败bet",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "api_method:bet and status_code:200 and not response_body.code:0 and operator: $operator",
+          "queryType": "lucene",
+          "refId": "A",
+          "timeField": "@timestamp"
+        },
+        {
+          "alias": "不确定bet状态数量",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "api_method:bet and not status_code: 200 and operator: $operator",
+          "queryType": "lucene",
+          "refId": "B",
+          "timeField": "@timestamp"
+        },
+        {
+          "alias": "余额不足bet数量",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "api_method:bet and status_code:200 and response_body.code:8205 and operator: $operator",
+          "queryType": "lucene",
+          "refId": "C",
+          "timeField": "@timestamp"
+        },
+        {
+          "alias": "撤销bet次数",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "api_method:cancelBet and operator: $operator",
+          "queryType": "lucene",
+          "refId": "D",
+          "timeField": "@timestamp"
+        },
+        {
+          "alias": "撤销成功次数",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "api_method:cancelBet and status_code:200 and response_body.code:0 and operator: $operator",
+          "queryType": "lucene",
+          "refId": "E",
+          "timeField": "@timestamp"
+        },
+        {
+          "alias": "撤销失败次数",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "api_method:cancelBet and (not status_code:200 or not response_body.code:0) and operator: $operator",
+          "queryType": "lucene",
+          "refId": "F",
+          "timeField": "@timestamp"
+        },
+        {
+          "alias": "award 失败次数",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "${ext_request_log_ds}"
+          },
+          "editorType": "builder",
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "api_method:award and (not status_code:200 or not response_body.code:0) and operator: $operator",
+          "queryType": "lucene",
+          "refId": "G",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "交易统计趋势 -- 可关联Operator",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 42,
+  "tags": [
+    "API",
+    "SLS"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allowCustomValue": true,
+        "current": {
+          "text": "API-Prod",
+          "value": "API-Prod"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Cluster",
+        "multi": false,
+        "name": "cluster",
+        "options": [],
+        "query": "API-Dev,API-Test,API-Prev,API-Prod",
+        "skipUrlSync": false,
+        "type": "custom",
+        "valuesFormat": "csv"
+      },
+      {
+        "allowCustomValue": true,
+        "current": {
+          "text": "Prom-API-Prod",
+          "value": "bflcnedkdhu68b"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "prom_ds",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "/.*${cluster}.*/",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allowCustomValue": true,
+        "current": {
+          "text": "ES-API-Prod-(ext_request_log)",
+          "value": "fflcnes0wc45ca"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "ext_request_log_ds",
+        "options": [],
+        "query": "elasticsearch",
+        "refresh": 1,
+        "regex": "/.*-${cluster}-\\(ext_request_log\\)/",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allowCustomValue": true,
+        "current": {
+          "text": "ES-API-Dev-(ext_request_log)",
+          "value": "dflcnegb7z6rke"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "bill_ds",
+        "options": [],
+        "query": "elasticsearch",
+        "refresh": 1,
+        "regex": "/.*-${cluster}-\\(bill\\)/",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allowCustomValue": true,
+        "current": {
+          "text": "ES-API-Prod-(wallet-center)",
+          "value": "bflf39gzmyeioa"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "wallet_center_ds",
+        "options": [],
+        "query": "elasticsearch",
+        "refresh": 1,
+        "regex": "/.*-${cluster}-\\(wallet-center\\)/",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allowCustomValue": true,
+        "current": {
+          "text": "SLS-API-Prod-(prod-log-c0752505818d04f2e8ec72fd01d657ed4)",
+          "value": "fflcqy3kvuwowa"
+        },
+        "description": "API项目业务日志库project",
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "sls_api_log_ds",
+        "options": [],
+        "query": "aliyun-log-service-datasource",
+        "refresh": 1,
+        "regex": "/SLS-${cluster}-\\(.*-log-.*\\)/",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allValue": "*",
+        "allowCustomValue": true,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "elasticsearch",
+          "uid": "${ext_request_log_ds}"
+        },
+        "definition": "",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Operator",
+        "multi": false,
+        "name": "operator",
+        "options": [],
+        "query": {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "operator",
+              "id": "3",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "desc",
+                "orderBy": "1",
+                "size": "10"
+              },
+              "type": "terms"
+            }
+          ],
+          "editorType": "builder",
+          "meta": {
+            "textField": "operator",
+            "valueField": "operator"
+          },
+          "metrics": [
+            {
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "",
+          "queryType": "lucene",
+          "refId": "ElasticsearchVariableQueryEditor-VariableQuery",
+          "timeField": "@timestamp"
+        },
+        "refresh": 1,
+        "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "browser",
+  "title": "API-SLS",
+  "_folder": "API"
+}

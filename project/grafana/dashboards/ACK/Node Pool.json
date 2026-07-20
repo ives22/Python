@@ -1,0 +1,3572 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "UnSchedulable"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 0
+      },
+      "id": 201,
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "count(group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip))",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Total",
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "step": 40,
+          "urlPath": ""
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count(group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() kube_node_spec_unschedulable==1)",
+          "instant": true,
+          "legendFormat": "UnSchedulable",
+          "range": false,
+          "refId": "B"
+        }
+      ],
+      "title": "Node Count",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "UnSchedulable"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 4,
+        "y": 0
+      },
+      "id": 75,
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(\n  sum by (host_ip) (label_replace(node_memory_MemTotal_bytes, \"host_ip\", \"$1\", \"instance\", \"([0-9]+\\\\.[0-9]+\\\\.[0-9]+\\\\.[0-9]+):.*\"))\n  * on (host_ip) \n  label_replace(group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"}) by(node), \"host_ip\", \"$1\", \"node\",\".*[^0-9]((\\\\d{1,3}\\\\.){3}\\\\d{1,3})$\")\n)",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Total",
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "step": 20,
+          "urlPath": ""
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(\n  sum by (host_ip) (\n    label_replace(\n      node_memory_MemTotal_bytes,\n      \"host_ip\", \"$1\",\n      \"instance\", \"([0-9]+\\\\.[0-9]+\\\\.[0-9]+\\\\.[0-9]+):.*\"\n    )\n  )\n  * on (host_ip)\n  label_replace(\n    (\n      group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"npf823a185d9f24e51a075c48a5ace2211\"}) by (node)\n      * on (node)\n      kube_node_spec_unschedulable == 1\n    ),\n    \"host_ip\", \"$1\",\n    \"node\", \".*[^0-9]((\\\\d{1,3}\\\\.){3}\\\\d{1,3})$\"\n  )\n)",
+          "instant": true,
+          "legendFormat": "UnSchedulable",
+          "range": false,
+          "refId": "B"
+        }
+      ],
+      "title": "Memory",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "UnSchedulable"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 9,
+        "y": 0
+      },
+      "id": 200,
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(\n    count by (host_ip) (label_replace(node_cpu_seconds_total{mode=\"system\"}, \"host_ip\", \"$1\", \"instance\", \"([0-9]+\\\\.[0-9]+\\\\.[0-9]+\\\\.[0-9]+):.*\")) \n    * on (host_ip) \n    label_replace(group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"}) by(node), \"host_ip\", \"$1\", \"node\",\".*[^0-9]((\\\\d{1,3}\\\\.){3}\\\\d{1,3})$\")\n)",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Total",
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "step": 20,
+          "urlPath": ""
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(\n    count by (host_ip) (label_replace(node_cpu_seconds_total{mode=\"system\"}, \"host_ip\", \"$1\", \"instance\", \"([0-9]+\\\\.[0-9]+\\\\.[0-9]+\\\\.[0-9]+):.*\")) \n    * on (host_ip) \n    label_replace(\n        (\n        group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"npf823a185d9f24e51a075c48a5ace2211\"}) by (node)\n            * on (node)\n            kube_node_spec_unschedulable == 1\n        ),\n        \"host_ip\", \"$1\",\n        \"node\", \".*[^0-9]((\\\\d{1,3}\\\\.){3}\\\\d{1,3})$\"\n    )\n)",
+          "instant": true,
+          "legendFormat": "UnSchedulable",
+          "range": false,
+          "refId": "B"
+        }
+      ],
+      "title": "CPU Cores",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "bytes"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 14,
+        "y": 0
+      },
+      "id": 202,
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(\n  sum by (host_ip) (label_replace(node_filesystem_size_bytes{fstype=~\"ext.*|xfs\", mountpoint !~\".*pod.*\"}, \"host_ip\", \"$1\", \"instance\", \"([0-9]+\\\\.[0-9]+\\\\.[0-9]+\\\\.[0-9]+):.*\")) * on (host_ip) \n    label_replace(group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"}) by(node), \"host_ip\", \"$1\", \"node\",\".*[^0-9]((\\\\d{1,3}\\\\.){3}\\\\d{1,3})$\")\n)",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Total",
+          "refId": "A",
+          "step": 20
+        }
+      ],
+      "title": "Disk",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "s"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 19,
+        "y": 0
+      },
+      "id": 15,
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "avg(\n  sum by (host_ip) (label_replace(time() - node_boot_time_seconds{}, \"host_ip\", \"$1\", \"instance\", \"([0-9]+\\\\.[0-9]+\\\\.[0-9]+\\\\.[0-9]+):.*\")) * on (host_ip) \n    label_replace(group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"}) by(node), \"host_ip\", \"$1\", \"node\",\".*[^0-9]((\\\\d{1,3}\\\\.){3}\\\\d{1,3})$\")\n)",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 40
+        }
+      ],
+      "title": "Avg Boot Time",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Request: 根据Pod Request 值计算节点平均水位；\nLimit: 根据Pod Limit 值计算节点平均水位；\nUsage: 根据Pod 内存真实使用值计算节点平均水位；\n",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percentunit"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "id": 216,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "avg(group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() (sum(kube_pod_container_resource_requests_memory_bytes)by(node)/sum(kube_node_status_allocatable{resource=\"memory\"})by(node)))",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "legendFormat": "Request",
+          "method": "GET",
+          "queryParams": "",
+          "range": true,
+          "refId": "A",
+          "urlPath": ""
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "avg(group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() (sum(kube_pod_container_resource_limits_memory_bytes)by(node)/sum(kube_node_status_allocatable{resource=\"memory\"})by(node)))",
+          "legendFormat": "Limit",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "avg(group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() (sum(container_memory_working_set_bytes{container!=\"\"})by(node)/sum(kube_node_status_allocatable{resource=\"memory\"})by(node)))",
+          "legendFormat": "Usage",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Node Average Memory(%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "位于不同主机上所有容器的 Request/Usage/Limit 的CPU核数跟不同主机的总核数相除，计算节点级平均率。\n Request: 根据 Pod CPU Request 值计算CPU平均水位；\n Limit: 根据 Pod CPU Limit 值计算CPU平均水位；\n Usage: 根据 Pod CPU Usage 值计算节点平均水位。\n",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percentunit"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "id": 217,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "avg(group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() (sum(kube_pod_container_resource_requests_cpu_cores)by(node)/sum(kube_node_status_allocatable{resource=\"cpu\"})by(node)))",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "legendFormat": "Request",
+          "method": "GET",
+          "queryParams": "",
+          "range": true,
+          "refId": "A",
+          "urlPath": ""
+        },
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "avg(group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() (sum(rate(container_cpu_usage_seconds_total{container!=\"\"}[1m]))by(node)/sum(kube_node_status_allocatable{resource=\"cpu\"})by(node)))",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "legendFormat": "Usage",
+          "method": "GET",
+          "queryParams": "",
+          "range": true,
+          "refId": "B",
+          "urlPath": ""
+        },
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "avg(group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() (sum(kube_pod_container_resource_limits_cpu_cores)by(node)/sum(kube_node_status_allocatable{resource=\"cpu\"})by(node)))",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "legendFormat": "Limit",
+          "method": "GET",
+          "queryParams": "",
+          "range": true,
+          "refId": "C",
+          "urlPath": ""
+        }
+      ],
+      "title": "Node Average CPU(%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "基于节点调度资源占用进行统计。",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Allocatable Memory"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              },
+              {
+                "id": "custom.width",
+                "value": 148
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Memory Request/Allocatable"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 0.7
+                    },
+                    {
+                      "color": "red",
+                      "value": 0.85
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 207
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU Request/Allocatable"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 0.7
+                    },
+                    {
+                      "color": "red",
+                      "value": 0.85
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 177
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Pods Request/Allocatable"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 0.7
+                    },
+                    {
+                      "color": "red",
+                      "value": 0.85
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 183
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Memory Limit/Allocatable"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 2
+                    },
+                    {
+                      "color": "red",
+                      "value": 3.5
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 183
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU Limit/Allocatable"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 1
+                    },
+                    {
+                      "color": "red",
+                      "value": 3.5
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 160
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Memory Used/Allocatable"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 0.7
+                    },
+                    {
+                      "color": "red",
+                      "value": 0.85
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 181
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU Used/Allocatable"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 0.7
+                    },
+                    {
+                      "color": "red",
+                      "value": 0.85
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 160
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Allocatable CPU"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Allocatable Pod"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Scheduling"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "index": 0,
+                        "text": "Normal"
+                      },
+                      "1": {
+                        "index": 1,
+                        "text": "Disabled"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 95
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Node IP"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": null
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "node",
+                    "url": "/d/k8s-node-overview/node-overview?var-node=${__data.fields[\"Node IP\"]}&showTitle"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 206,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() group(kube_node_info)by(node, internal_ip)",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right()  sum(kube_node_status_allocatable{resource=\"memory\"})by(node)",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() sum(kube_node_status_allocatable{resource=\"cpu\"})by(node)",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right()  sum(kube_node_status_allocatable{resource=\"pods\"})by(node)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "Pod Allocatable",
+          "range": false,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() (sum((max(kube_pod_status_phase{phase=\"Running\"}) by (pod,namespace) > 0)  * on (pod,namespace) group_right() sum(kube_pod_container_resource_requests{resource=\"memory\"}) by (pod,namespace,node))by(node)/sum(kube_node_status_allocatable{resource=\"memory\"})by(node))",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "E"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() (sum((max(kube_pod_status_phase{phase=\"Running\"}) by (pod,namespace) > 0)  * on (pod,namespace) group_right() sum(kube_pod_container_resource_requests{resource=\"cpu\"}) by (pod,namespace,node))by(node)/sum(kube_node_status_allocatable{resource=\"cpu\"})by(node))",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "F"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() (count((max(kube_pod_status_phase{phase=\"Running\"}) by (pod,namespace) > 0)  * on (pod,namespace) group_right() sum(kube_pod_info) by (pod,namespace,node))by(node)/sum(kube_node_status_allocatable{resource=\"pods\"})by(node))",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "G"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right()  sum((max(kube_pod_status_phase{phase=\"Running\"}) by (pod,namespace) > 0)  * on (pod,namespace) group_right() sum(kube_pod_container_resource_limits{resource=\"memory\"}) by (pod,namespace,node))by(node)/sum(kube_node_status_allocatable{resource=\"memory\"})by(node)",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "H"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right()  sum((max(kube_pod_status_phase{phase=\"Running\"}) by (pod,namespace) > 0)  * on (pod,namespace) group_right() sum(kube_pod_container_resource_limits{resource=\"cpu\"}) by (pod,namespace,node))by(node)/sum(kube_node_status_allocatable{resource=\"cpu\"})by(node)",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "I"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() max(kube_node_spec_unschedulable) by (node)",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "J"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() sum(group(kube_pod_info) by (pod,namespace,node) * on (pod,namespace) group_left() sum(container_memory_working_set_bytes{container!=\"\",container!=\"POD\"}) by (pod,namespace)) by (node)/sum(kube_node_status_allocatable{resource=\"memory\"})by(node)",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "K"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) * on (node) group_right() sum(group(kube_pod_info) by (pod,namespace,node) * on (pod,namespace) group_left() sum(irate(container_cpu_usage_seconds_total{container!=\"\",container!=\"POD\"}[1m])) by (pod,namespace)) by (node)/sum(kube_node_status_allocatable{resource=\"cpu\"})by(node)",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "L"
+        }
+      ],
+      "title": "Node Scheduler Resource Summary",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "node"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "Value #A": true
+            },
+            "indexByName": {
+              "Time 1": 3,
+              "Time 10": 21,
+              "Time 2": 5,
+              "Time 3": 7,
+              "Time 5": 11,
+              "Time 6": 13,
+              "Time 7": 15,
+              "Time 8": 17,
+              "Time 9": 19,
+              "Value #A": 4,
+              "Value #B": 6,
+              "Value #C": 8,
+              "Value #D": 9,
+              "Value #E": 12,
+              "Value #F": 14,
+              "Value #G": 16,
+              "Value #H": 18,
+              "Value #I": 20,
+              "Value #J": 2,
+              "Value #K": 10,
+              "Value #L": 10,
+              "internal_ip": 0,
+              "node": 1
+            },
+            "renameByName": {
+              "Value #B": "Allocatable Memory",
+              "Value #C": "Allocatable CPU",
+              "Value #D": "Allocatable Pod",
+              "Value #E": "Memory Request/Allocatable",
+              "Value #F": "CPU Request/Allocatable",
+              "Value #G": "Pods Request/Allocatable",
+              "Value #H": "Memory Limit/Allocatable",
+              "Value #I": "CPU Limit/Allocatable",
+              "Value #J": "Scheduling",
+              "Value #K": "Memory Used/Allocatable",
+              "Value #L": "CPU Used/Allocatable",
+              "internal_ip": "Node IP",
+              "node": "Node Name"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "基于节点物理资源占用进行统计。",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "nodename"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 209
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Memory Total"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              },
+              {
+                "id": "custom.width",
+                "value": 108
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Disk Usage"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 70
+                    },
+                    {
+                      "color": "red",
+                      "value": 85
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 99
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU Usage"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 0.7
+                    },
+                    {
+                      "color": "red",
+                      "value": 0.85
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 95
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Memory Usage"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 70
+                    },
+                    {
+                      "color": "red",
+                      "value": 85
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 117
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Disk Read"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "binBps"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 10485760
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 84
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Disk Write"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "binBps"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 10485760
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 88
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Network In"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "binBps"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 10485760
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 99
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Network Out"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "binBps"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 10485760
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 102
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "SysName"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 88
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU Total"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 86
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Disk Usage"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 0.7
+                    },
+                    {
+                      "color": "red",
+                      "value": 0.85
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Node IP"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "node",
+                    "url": "/d/k8s-node-overview/node-overview?var-node=${__data.fields[\"Node IP\"]}&showTitle"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "id": 185,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Memory Usage"
+          }
+        ]
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") + on (host_ip) group_right() label_replace(node_uname_info{},\"host_ip\",\"$1\",\"instance\",\"(.*):.*\") - 0",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        },
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(node_memory_MemTotal_bytes,\"host_ip\",\"$1\",\"instance\",\"(.*):.*\") - 0)by(instance)",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "method": "GET",
+          "queryParams": "",
+          "refId": "B",
+          "urlPath": ""
+        },
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(count(node_cpu_seconds_total{mode='system'})by(instance),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\"))by(instance)",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "method": "GET",
+          "queryParams": "",
+          "refId": "C",
+          "urlPath": ""
+        },
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(sum(time() - node_boot_time_seconds)by(instance),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\"))by(instance)",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "method": "GET",
+          "queryParams": "",
+          "refId": "D",
+          "urlPath": ""
+        },
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "avg(label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(1-(node_filesystem_free_bytes{mountpoint=\"/\",fstype!=\"rootfs\"}/node_filesystem_size_bytes{mountpoint=\"/\",fstype!=\"rootfs\"}),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\"))by(instance)",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "method": "GET",
+          "queryParams": "",
+          "refId": "E",
+          "urlPath": ""
+        },
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(1 - sum(rate(node_cpu_seconds_total{mode=\"idle\"}[1m])) by (instance) / sum(rate(node_cpu_seconds_total[1m])) by (instance),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\"))by (instance)",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "method": "GET",
+          "queryParams": "",
+          "refId": "F",
+          "urlPath": ""
+        },
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace((1 - (node_memory_MemAvailable_bytes{} / (node_memory_MemTotal_bytes{})))* 100,\"host_ip\",\"$1\",\"instance\",\"(.*):.*\"))by(instance)",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Memory Usage",
+          "method": "GET",
+          "queryParams": "",
+          "refId": "G",
+          "urlPath": ""
+        },
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(max(irate(node_disk_read_bytes_total{}[5m])) by (instance),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\"))by(instance)",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "最大读取",
+          "method": "GET",
+          "queryParams": "",
+          "refId": "H",
+          "urlPath": ""
+        },
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(max(irate(node_disk_written_bytes_total{}[5m])) by (instance),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\"))by (instance)",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "最大写入",
+          "method": "GET",
+          "queryParams": "",
+          "refId": "I",
+          "urlPath": ""
+        },
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(max(irate(node_network_receive_bytes_total{}[5m])) by (instance),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\"))by(instance)",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "下载带宽",
+          "method": "GET",
+          "queryParams": "",
+          "refId": "J",
+          "urlPath": ""
+        },
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(max(irate(node_network_transmit_bytes_total{}[5m])) by (instance),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\"))by(instance)",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "上传带宽",
+          "method": "GET",
+          "queryParams": "",
+          "refId": "K",
+          "urlPath": ""
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_replace(group(group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (node, internal_ip),\"instance\",\"$1:9100\",\"internal_ip\",\"(.*)\")",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "L"
+        }
+      ],
+      "title": "Node Physical Resource Summary",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "instance"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Time 1": true,
+              "Time 2": true,
+              "Time 7": true,
+              "Value #A": true,
+              "Value #L": true,
+              "container": true,
+              "domainname": true,
+              "endpoint": true,
+              "endpoint 1": true,
+              "endpoint 2": true,
+              "endpoint 3": true,
+              "instance": true,
+              "internal_ip": true,
+              "job": true,
+              "job 1": true,
+              "job 2": true,
+              "job 3": true,
+              "machine": true,
+              "namespace": true,
+              "namespace 1": true,
+              "namespace 2": true,
+              "namespace 3": true,
+              "nodename": false,
+              "pod": true,
+              "pod 1": true,
+              "pod 2": true,
+              "pod 3": true,
+              "pod_name": true,
+              "pod_name 1": true,
+              "pod_name 2": true,
+              "pod_name 3": true,
+              "service": true,
+              "service 1": true,
+              "service 2": true,
+              "service 3": true,
+              "version": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Time 1": 1,
+              "Time 10": 30,
+              "Time 11": 32,
+              "Time 12": 38,
+              "Time 13": 41,
+              "Time 2": 13,
+              "Time 3": 15,
+              "Time 4": 17,
+              "Time 5": 19,
+              "Time 6": 21,
+              "Time 7": 23,
+              "Time 8": 25,
+              "Time 9": 28,
+              "Value #A": 12,
+              "Value #B": 14,
+              "Value #C": 16,
+              "Value #D": 18,
+              "Value #E": 20,
+              "Value #F": 22,
+              "Value #G": 24,
+              "Value #H": 27,
+              "Value #I": 29,
+              "Value #J": 31,
+              "Value #K": 33,
+              "Value #L": 40,
+              "Value #M": 26,
+              "domainname": 2,
+              "endpoint": 3,
+              "host_ip": 4,
+              "instance": 0,
+              "internal_ip": 39,
+              "job": 5,
+              "machine": 6,
+              "namespace": 7,
+              "node": 34,
+              "nodename": 35,
+              "pod": 8,
+              "pod_name": 9,
+              "release": 36,
+              "service": 10,
+              "sysname": 37,
+              "version": 11
+            },
+            "renameByName": {
+              "Value #A": "",
+              "Value #B": "Memory Total",
+              "Value #C": "CPU Total",
+              "Value #D": "Time",
+              "Value #E": "Disk Usage",
+              "Value #F": "CPU Usage",
+              "Value #G": "Memory Usage",
+              "Value #H": "Disk Read",
+              "Value #I": "Disk Write",
+              "Value #J": "Network In",
+              "Value #K": "Network Out",
+              "Value #M": "Disk Usage",
+              "container": "",
+              "host_ip": "Node IP",
+              "instance": "",
+              "ip": "Node IP",
+              "node": "Node Name",
+              "nodename": "ECS Name",
+              "release": "Release",
+              "sysname": "SysName"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "bytes"
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 29
+      },
+      "id": 203,
+      "maxDataPoints": 100,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(node_memory_MemTotal_bytes-node_memory_Cached_bytes - node_memory_Buffers_bytes-node_memory_MemFree_bytes,\"host_ip\",\"$1\",\"instance\",\"(.*):.*\")",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{host_ip}}",
+          "method": "GET",
+          "queryParams": "",
+          "range": true,
+          "refId": "A",
+          "step": 20,
+          "urlPath": ""
+        }
+      ],
+      "title": "Memory Usage (Not Include Cache)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "UnSchedulable"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 29
+      },
+      "id": 204,
+      "maxDataPoints": 100,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(node_memory_MemTotal_bytes-node_memory_MemFree_bytes,\"host_ip\",\"$1\",\"instance\",\"(.*):.*\")",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{host_ip}}",
+          "method": "GET",
+          "queryParams": "",
+          "range": true,
+          "refId": "A",
+          "step": 20,
+          "urlPath": ""
+        }
+      ],
+      "title": "Memory Usage (Include Cache)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percentunit"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 38
+      },
+      "id": 207,
+      "maxDataPoints": 100,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(1 - sum(rate(node_cpu_seconds_total{mode=\"idle\"}[1m])) by (instance) / sum(rate(node_cpu_seconds_total[1m])) by (instance),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\")",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{host_ip}}",
+          "method": "GET",
+          "queryParams": "",
+          "range": true,
+          "refId": "A",
+          "step": 20,
+          "urlPath": ""
+        }
+      ],
+      "title": "CPU Usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 2
+              },
+              {
+                "color": "orange",
+                "value": 8
+              }
+            ]
+          },
+          "unit": "none"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 38
+      },
+      "id": 213,
+      "maxDataPoints": 100,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "label_replace(sum(label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(max(node_load1) by (instance),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\"))by(instance),\"host_ip\",\"$1\",\"instance\",\"(.*):(.*)\")",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{host_ip}}",
+          "method": "GET",
+          "queryParams": "",
+          "range": true,
+          "refId": "A",
+          "step": 20,
+          "urlPath": ""
+        }
+      ],
+      "title": "CPU Load(1m)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 0.7
+              },
+              {
+                "color": "red",
+                "value": 0.85
+              }
+            ]
+          },
+          "unit": "percentunit"
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 46
+      },
+      "id": 212,
+      "maxDataPoints": 100,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true,
+          "width": 300
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(1-node_filesystem_free_bytes{fstype=~\"ext4|xfs\"}/node_filesystem_size_bytes{fstype=~\"ext4|xfs\"},\"host_ip\",\"$1\",\"instance\",\"(.*):.*\")",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{host_ip}} MountPoint: {{mountpoint}}",
+          "method": "GET",
+          "queryParams": "",
+          "range": true,
+          "refId": "A",
+          "step": 20,
+          "urlPath": ""
+        }
+      ],
+      "title": "Disk Usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "binBps"
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 46
+      },
+      "id": 208,
+      "maxDataPoints": 100,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(max(irate(node_disk_read_bytes_total{}[1m])) by (instance),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\")",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{host_ip}}",
+          "method": "GET",
+          "queryParams": "",
+          "range": true,
+          "refId": "A",
+          "step": 20,
+          "urlPath": ""
+        }
+      ],
+      "title": "Disk Read",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "binBps"
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 16,
+        "y": 46
+      },
+      "id": 209,
+      "maxDataPoints": 100,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(max(irate(node_disk_written_bytes_total{}[1m])) by (instance),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\")",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{host_ip}}",
+          "method": "GET",
+          "queryParams": "",
+          "range": true,
+          "refId": "A",
+          "step": 20,
+          "urlPath": ""
+        }
+      ],
+      "title": "Disk Write",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "binBps"
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 55
+      },
+      "id": 210,
+      "maxDataPoints": 100,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(max(irate(node_network_receive_bytes_total{}[1m])) by (instance),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\")",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{host_ip}}",
+          "method": "GET",
+          "queryParams": "",
+          "range": true,
+          "refId": "A",
+          "step": 20,
+          "urlPath": ""
+        }
+      ],
+      "title": "Network In",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "binBps"
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 55
+      },
+      "id": 211,
+      "maxDataPoints": 100,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(max(irate(node_network_transmit_bytes_total{}[1m])) by (instance),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\")",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{host_ip}}",
+          "method": "GET",
+          "queryParams": "",
+          "range": true,
+          "refId": "A",
+          "step": 20,
+          "urlPath": ""
+        }
+      ],
+      "title": "Network Out",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        }
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 16,
+        "y": 55
+      },
+      "id": 214,
+      "maxDataPoints": 100,
+      "options": {
+        "annotations": {
+          "clustering": -1,
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "label_replace((group (group(kube_node_labels{label_alibabacloud_com_nodepool_id=\"$nodepool\"})by (node) + on (node) group_right() kube_node_info) by (internal_ip)), \"host_ip\", \"$1\", \"internal_ip\", \"(.*)\") * on(host_ip) group_right() label_replace(max(node_sockstat_TCP_alloc) by (instance),\"host_ip\",\"$1\",\"instance\",\"(.*):.*\")",
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{host_ip}}",
+          "method": "GET",
+          "queryParams": "",
+          "range": true,
+          "refId": "A",
+          "step": 20,
+          "urlPath": ""
+        }
+      ],
+      "title": "Sockets Number",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 42,
+  "tags": [
+    "Kubernetes",
+    "Node",
+    "Node Pool",
+    "scene:container",
+    "env:type:ManagedKubernetes",
+    "dashboard:name:k8s-node-pool"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allowCustomValue": true,
+        "current": {
+          "text": "Prom-API-Prod",
+          "value": "cflf38y5l0ni8a"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Cluster",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allowCustomValue": true,
+        "current": {
+          "text": "np5345b3ad9f17489094a32ab23c999135",
+          "value": "np5345b3ad9f17489094a32ab23c999135"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(kube_node_labels,label_alibabacloud_com_nodepool_id)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Node Pool",
+        "multi": false,
+        "name": "nodepool",
+        "options": [],
+        "query": {
+          "query": "label_values(kube_node_labels,label_alibabacloud_com_nodepool_id)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "browser",
+  "title": "Node Pool",
+  "_folder": "ACK"
+}

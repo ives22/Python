@@ -1,0 +1,7 @@
+[zabbix]
+api_url = http://your-zabbix-host/api_jsonrpc.php
+user = your_zabbix_username
+password = your_zabbix_password
+
+[excel]
+file_name = 服务器资源使用情况分析

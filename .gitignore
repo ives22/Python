@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Environment & Secrets
+.env
+*.env
+
+# Config files with secrets (use .example instead)
+project/grafana/config.yaml
+project/zabbix_export_items/config.ini
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Distribution
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Logs
+*.log
