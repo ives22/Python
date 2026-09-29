@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.13"
 dependencies = [
+    "alibabacloud-cms20190101>=4.0.10",
     "alibabacloud-cr20160607>=1.0.1",
     "alibabacloud-credentials>=1.0.8",
     "alibabacloud-oss-v2>=1.3.0",
@@ -18,5 +19,9 @@ dependencies = [
 ]
 
 [[tool.uv.index]]
-url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+url = "https://pypi.org/simple"
 default = true
+
+# [[tool.uv.index]]
+# url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+# default = true

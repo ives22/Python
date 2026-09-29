@@ -1,0 +1,270 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "graphTooltip": 1,
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${prom_ds}"
+      },
+      "description": "wallet-center Bet/Award 聚合 RPC 当前 5 分钟 QPS。",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "min": 0,
+          "unit": "reqps"
+        },
+        "overrides": [
+
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "sum by (cluster, namespace, service) (rate(rpc_server_requests_duration_ms_count{namespace=\"api-center\",service=\"wallet-center\",method=~\"/game[.]GameService/(Bet|Award)\"}[5m]))",
+          "legendFormat": "当前 {{service}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "当前 Bet/Award QPS",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${prom_ds}"
+      },
+      "description": "与当前窗口相同聚合方式的前一 5 分钟基线。",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "min": 0,
+          "unit": "reqps"
+        },
+        "overrides": [
+
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "sum by (cluster, namespace, service) (rate(rpc_server_requests_duration_ms_count{namespace=\"api-center\",service=\"wallet-center\",method=~\"/game[.]GameService/(Bet|Award)\"}[5m] offset 5m))",
+          "legendFormat": "基线 {{service}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "前一窗口基线 QPS",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${prom_ds}"
+      },
+      "description": "当前窗口相对前一窗口的 QPS 跌幅；30% 为告警阈值。",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 20
+              },
+              {
+                "color": "red",
+                "value": 30
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "100 * (1 - (sum by (cluster, namespace, service) (rate(rpc_server_requests_duration_ms_count{namespace=\"api-center\",service=\"wallet-center\",method=~\"/game[.]GameService/(Bet|Award)\"}[5m])) / on (cluster, namespace, service) sum by (cluster, namespace, service) (rate(rpc_server_requests_duration_ms_count{namespace=\"api-center\",service=\"wallet-center\",method=~\"/game[.]GameService/(Bet|Award)\"}[5m] offset 5m))))",
+          "legendFormat": "跌幅 {{service}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "QPS 跌幅",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${prom_ds}"
+      },
+      "description": "仅当历史基线大于 5000 req/s 时才进入告警判定。",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "min": 0,
+          "unit": "reqps"
+        },
+        "overrides": [
+
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "sum by (cluster, namespace, service) (rate(rpc_server_requests_duration_ms_count{namespace=\"api-center\",service=\"wallet-center\",method=~\"/game[.]GameService/(Bet|Award)\"}[5m] offset 5m))",
+          "legendFormat": "基线 {{service}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "告警基线（> 5000 req/s）",
+      "type": "timeseries"
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": [
+    "alert",
+    "wallet-center",
+    "business-qps"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Prom-API-Prod",
+          "value": "Prom-API-Prod"
+        },
+        "label": "Prometheus",
+        "name": "prom_ds",
+        "query": "prometheus",
+        "refresh": 1,
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h"
+    ]
+  },
+  "title": "wallet-center Bet/Award QPS 告警",
+  "uid": "wallet-center-qps-alert",
+  "version": 1
+}
